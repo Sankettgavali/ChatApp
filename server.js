@@ -11,7 +11,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? "*"  // Allow all origins in production for now
+      ? ["https://chatapp1-vq5f.onrender.com", "http://localhost:3000"]
       : "http://localhost:3000",
     methods: ["GET", "POST"]
   }
@@ -20,7 +20,7 @@ const io = socketIo(server, {
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? "*"  // Allow all origins in production for now
+    ? ["https://chatapp1-vq5f.onrender.com", "http://localhost:3000"]
     : "http://localhost:3000",
   credentials: true
 }));
@@ -29,6 +29,7 @@ app.use(express.json());
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
+  console.log('Serving static files from:', path.join(__dirname, 'client/build'));
 }
 
 // MongoDB Connection
@@ -59,6 +60,11 @@ const messageSchema = new mongoose.Schema({
 });
 
 const Message = mongoose.model('Message', messageSchema);
+
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' });
+});
 
 // Routes
 app.get('/api/users', async (req, res) => {
