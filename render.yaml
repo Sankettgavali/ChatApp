@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: quick-chat-app
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://sankettgavali:sanket123@cluster0.isr8wl1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: PORT
+        value: 10000 
